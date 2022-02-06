@@ -1,0 +1,105 @@
+{% load cart_template_tags %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+  <h1> Welcome {{user}} </h1>
+
+<nav class="navbar-brand">
+  <div class="navbar navbar-light blue lighten-4">
+    <div class="navbar-header">
+       
+    </div>
+    <ul class="nav navbar-nav">
+      {% if request.user.is_authenticated %}
+      <li class="active"><a href="{% url 'home' %}">Home</a></li>
+      </li>
+      <li class="active"><a href="" class="nav-link waves-effect">
+            <span class="fa" style="font-size:24px">&#xf07a;{{request.user|cart_item_count}}</span>
+            </a></li>
+       <li><a href="#">Hello, User {{request.user.username}}</a></li>
+       <li><a class="button secondaryAction text-dark text-center" href="{% url 'logoutP' %}">Logout</a></li>
+    </ul>
+     {% else %}
+    <ul class="nav navbar-nav navbar-right">
+      <li><a class="button secondaryAction text-dark text-center" href="{% url 'login' %}">login</a></li>
+      <li><a class="button secondaryAction text-dark text-center" href="{% url 'sign-up' %}">Signup</a></li>
+      
+    </ul>
+  </div>
+</nav><br>
+  {% endif %}
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 25%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+
+<main>
+ <div class="container">
+ <h1>Welcome to shop</h1>
+ <div class="alignRow">
+ <div class="imageColumn">
+{% for object in object_list %}
+ 
+    <img src="{{object.image.url}}" class="card-img-top" alt="">
+    <h5>{{object.get_category_display}}</h5>
+    </a>
+    <span class="badge badge-pill-color">NEW</span>
+
+    <a href="{% url 'product' object.slug %}" class="dark-grey-text">{{object.title}}
+    </a><br>
+     <p><span class="boldtext">Views:</span> {{object.views}}</p>
+    <p>{{object.description}}</p><br>
+    <a href="{{object.get_add_to_cart_url}}" class="btn btn-primary btn-md my-0 p" type="submit">Add to cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+    </a>
+    <a href="{{object.get_remove_from_cart_url}}" class="btn btn-danger btn-md my-0 p" type="submit">Remove from cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+    </a>
+    <h4 class="font-weight-bold blue-text">
+
+    {% if object.discount_price %}
+    <strong>${{object.discount_price}}</strong>
+    {% else %}
+    <strong>${{object.price}}</strong>
+    {% endif %}
+    </h4>
+   {% endfor %}
+  </div>
+
+</div>
+</div>
+</main>
+</body>
+
+</html>
+{% endblock %}
